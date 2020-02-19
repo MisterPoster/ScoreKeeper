@@ -43,32 +43,51 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState)
+    public void onSaveInstanceState(Bundle outState)
     {
         outState.putInt(STATE_SCORE_1, score1);
         outState.putInt(STATE_SCORE_2, score2);
 
-        super.onSaveInstanceState(outState, outPersistentState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
-    public boolean onOptionsItemSelected (MenuItem item)
+    public boolean onOptionsItemSelected (MenuItem menuItem)
     {
+
+        if (menuItem.getItemId () ==  R.id.night_mode)
+        {
+            int nightMode = AppCompatDelegate.getDefaultNightMode ();
+
+            if (nightMode == AppCompatDelegate.MODE_NIGHT_YES)
+            {
+                AppCompatDelegate.setDefaultNightMode (AppCompatDelegate.MODE_NIGHT_NO);
+            }
+            else
+            {
+                AppCompatDelegate.setDefaultNightMode (AppCompatDelegate.MODE_NIGHT_YES);
+            }
+
+            recreate ();
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menuItem)
+    {
+        getMenuInflater ().inflate (R.menu.main_menu, menuItem);
+
         int nightMode = AppCompatDelegate.getDefaultNightMode();
 
-//        if (item.getItemId () == R.id.night_mode)
-//        {
-//            if (nightMode == AppCompatDelegate.MODE_NIGHT_YES)
-//            {
-//                AppCompatDelegate.setDefaultNightMode (AppCompatDelegate.MODE_NIGHT_NO);
-//            }
-//            else
-//            {
-//                AppCompatDelegate.setDefaultNightMode (AppCompatDelegate.MODE_NIGHT_YES);
-//            }
-//
-//            recreate ();
-//        }
+        if (nightMode == AppCompatDelegate.MODE_NIGHT_YES)
+        {
+            menuItem.findItem (R.id.night_mode).setTitle (R.string.day_mode);
+        }
+        else
+        {
+            menuItem.findItem (R.id.night_mode).setTitle (R.string.night_mode);
+        }
 
         return true;
     }
@@ -86,14 +105,6 @@ public class MainActivity extends AppCompatActivity
                 score2--;
                 score2_text.setText(String.valueOf(score2));
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu (Menu menu)
-    {
-//        getMenuInflater ().inflate (R.values.main_menu, menu);
-
-        return super.onCreateOptionsMenu(menu);
     }
 
     public void increase(View v)
